@@ -1,0 +1,67 @@
+<article *ngIf="todos$|async as todos">
+  <header>
+    <h3>Add Todo:</h3>
+    <button mat-icon-button>
+      <mat-icon aria-label="Minimize">expand_less</mat-icon>
+    </button>
+  </header>
+  <form #todoForm="ngForm" (ngSubmit)="addTodo()">
+    <main>
+      <mat-form-field appearance="outline">
+        <mat-label>Todo</mat-label>
+        <input matInput required placeholder="The name of your Todo" [(ngModel)]="todoModel.name" name="name" #name="ngModel">
+      </mat-form-field>
+      <button mat-fab matSuffix type="button" color="accent" matTooltip="Attach Image" matTooltipPosition="after" (click)="fileInput.click()">
+        <mat-icon aria-label="Attach Image">attach_file</mat-icon>
+      </button>
+      <mat-form-field  appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput cdkTextareaAutosize name="description"
+          placeholder="Your Todo's description"
+          [(ngModel)]="todoModel.description">
+        </textarea>
+      </mat-form-field>
+      <button mat-fab matSuffix type="button"
+        [color]=" todoModel.complete ? 'primary' : '' "
+        (click)="todoModel.complete = !todoModel.complete"
+        matTooltip="Mark as Complete" matTooltipPosition="after">
+        <mat-icon aria-label="Attach Image">check</mat-icon>
+      </button>
+      <button class="add-button" mat-stroked-button type="submit" color="primary">
+        <mat-icon>add_circle</mat-icon>
+        Add
+      </button>
+    </main>
+    <input type="file" #fileInput multiple (change)="upload( $event, fileInput )" />
+
+  </form>
+</article>
+<article *ngIf="todos$|async as todos; else loading">
+  <header>
+    <h3>Your Todos:</h3>
+  </header>
+  <main>
+    <mat-nav-list>
+      <ng-container *ngFor="let todo of todos; last as isLast">
+        <mat-list-item [class.done]="todo.complete">
+          <a matLine [routerLink]="{ outlets: { popup: [todo.id] } }">{{ todo.name }}</a>
+          <button mat-icon-button (click)="removeTodo( todo.id )" matTooltip="Delete" matTooltipPosition="above">
+              <mat-icon>close</mat-icon>
+            </button>
+          <button mat-icon-button color="primary" (click)="updateTodo( todo.id, { complete: !todo.complete } )" matTooltip="Complete Todo" matTooltipPosition="after">
+            <mat-icon>{{ todo.complete ? 'check_circle_outline' : 'check' }}</mat-icon>
+          </button>
+        </mat-list-item>
+        <mat-divider *ngIf="!isLast"></mat-divider>
+      </ng-container>
+    </mat-nav-list>
+  </main>
+</article>
+<div class="popup">
+  <router-outlet name="popup"></router-outlet>
+</div>
+<ng-template #loading>
+  <article>
+    <mat-spinner></mat-spinner>
+  </article>
+</ng-template>

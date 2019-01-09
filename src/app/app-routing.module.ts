@@ -1,9 +1,33 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { TodosComponent } from './todos/todos.component';
+import { TodoComponent } from './todo/todo.component';
+import { TodoResolver } from './todo.resolver';
 
-const routes: Routes = [];
+const routes: Routes =
+[
+  {
+    path: '',
+    redirectTo: 'todos',
+    pathMatch: 'full'
+  },
+  {
+    path: 'todos',
+    component: TodosComponent,
+    children:
+    [
+      {
+        path: ':id',
+        component: TodoComponent, 
+        resolve: { todo: TodoResolver },
+        outlet: 'popup',
+      }
+    ]
+  },
+];
 
-@NgModule({
+@NgModule
+({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })

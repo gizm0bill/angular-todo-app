@@ -1,0 +1,60 @@
+@import '~@angular/material/theming';
+
+:host
+{
+  display: grid;
+  grid-template: auto/1fr minmax(28rem, auto) 1fr;
+  padding: 1rem;
+}
+article
+{
+  grid-column: 2;
+  padding: 1rem;
+  background-color: white;
+  & + & { margin-top: 1rem; }
+  &:first-child { @include mat-elevation(3); }
+  &:nth-child(2) { @include mat-elevation(1); }
+}
+header
+{
+  display: flex;
+  align-items: center;
+  margin: { bottom: 1rem; };
+  min-height: 2.5rem;
+  button { margin-right: 0.75rem; }
+  h3 { flex: 1; text-indent: 1rem; }
+}
+form
+{
+  padding: 0 .25rem;
+  main
+  {
+    display: grid;
+    grid-template: auto / 1fr auto;
+    grid-gap: 1rem;
+    align-items: center;
+    justify-items: center;
+  }
+  .mat-form-field
+  {
+    width: 100%;
+  }
+  .mat-fab:not(.mat-primary):not(.mat-accent)
+  {
+    background-color: transparent;
+  }
+  .add-button
+  {
+    width: 100%;
+    padding: .25rem;
+    grid-area: 3 / 1 / 4 / 3;
+  }
+}
+.mat-list-item
+{
+  max-width: 26rem;
+  overflow: hidden;
+  button + button { margin-left: .5rem; }
+  &.done { a { text-decoration: line-through; } }
+}
+[type=file] { display: none; }

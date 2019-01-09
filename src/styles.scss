@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #F5F5F5 }
+
+h1, h2, h3, h4, h5, h6 { margin: 0; padding: 0; }
+
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+// Some material overrides
+.mat-button-toggle-appearance-standard .mat-button-toggle-label-content { line-height: normal !important; padding: .5rem !important; }
+.mat-button-toggle-appearance-standard.big .mat-button-toggle-label-content { line-height: normal !important; padding: 1rem !important; }
+.mat-form-field { margin-bottom: -1.34375em; } // TODO: calculate
+.mat-list-base { padding-top: 0 !important; }
