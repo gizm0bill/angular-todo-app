@@ -1,17 +1,16 @@
-import { Injectable } from "@angular/core";
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { Todo } from './todo';
+import { Injectable } from '@angular/core';
+import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
 import { TodoService } from './todo.service';
-import { find, take, tap, map } from 'rxjs/operators';
+import { Todo } from './todo';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class TodoResolver implements Resolve<Observable<Todo>>
 {
   constructor( private todoService: TodoService ) {}
-  
-  resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot )
+
+  resolve( route: ActivatedRouteSnapshot )
   {
-    return this.todoService.getTodoById( route.params.id );
+    return this.todoService.getTodoById( +route.params.id );
   }
 }

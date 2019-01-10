@@ -28,7 +28,8 @@ const routes: Routes =
 
 @NgModule
 ({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [ RouterModule.forRoot(routes) ],
+  exports: [ RouterModule ],
+  providers: [ TodoResolver ]
 })
 export class AppRoutingModule { }

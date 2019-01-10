@@ -1,3 +1,9 @@
-<p>
-  todo works!
-</p>
+<ng-container *ngIf=" todo$|async as todo ">
+  <header>
+    <h3>{{todo.name}}</h3>
+  </header>
+  <main>
+    <p>{{todo.description}}</p>
+  </main>
+  <footer></footer>
+</ng-container>

@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ReplaySubject, Observable, BehaviorSubject, Subject } from 'rxjs';
-import { filter, map, scan, shareReplay, switchMapTo, startWith, tap, take } from 'rxjs/operators';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { map, scan, shareReplay, take } from 'rxjs/operators';
 import { Todo } from './todo';
 
-type TodosProcess = (todos: Todo[]) => Todo[];
-
 let lastId = 0;
-@Injectable({ providedIn: 'root' })
+type TodosProcess = (todos: Todo[]) => Todo[];
+@Injectable()
 export class TodoService
 {
   todos$: Observable<Todo[]>;
@@ -15,19 +14,15 @@ export class TodoService
   private update$ = new Subject<Partial<Todo>>();
   private remove$ = new Subject<Partial<Todo>>();
   private get$ = new Subject<Partial<Todo>>();
-
-  todo$: Observable<Todo>;
-  private x: any;
   constructor()
   {
-    this.x = this.resetter$.pipe
+    this.todos$ = this.resetter$.pipe
     (
-      tap( _ => { debugger; } ),
+      // tap( _ => { debugger; } ),
       scan( ( todos: Todo[], process: TodosProcess ) => process( todos ), [] ),
-      tap( _ => { debugger; } ),
+      // tap( _ => { debugger; } ),
+      shareReplay(),
     );
-    this.todos$ = this.x.pipe( shareReplay() );
-
     // define add process
     this.create$.pipe
     (
@@ -68,7 +63,13 @@ export class TodoService
   }
   getTodoById( id: number )
   {
-    this.get$.next( { id } );
-    return this.resetter$.pipe( take(1), tap( _ => { debugger; } ) );
+    return this.todos$.pipe
+    (
+      take(1),
+      map( todos =>
+      {
+        return todos.find( todo => todo.id === id );
+      } )
+    );
   }
 }

@@ -9,7 +9,6 @@
 article
 {
   grid-column: 2;
-  padding: 1rem;
   background-color: white;
   & + & { margin-top: 1rem; }
   &:first-child { @include mat-elevation(3); }
@@ -19,14 +18,13 @@ header
 {
   display: flex;
   align-items: center;
-  margin: { bottom: 1rem; };
   min-height: 2.5rem;
   button { margin-right: 0.75rem; }
-  h3 { flex: 1; text-indent: 1rem; }
+  h3 { flex: 1; }
 }
 form
 {
-  padding: 0 .25rem;
+  main, header, footer { padding: 1rem; }
   main
   {
     display: grid;
@@ -35,24 +33,42 @@ form
     align-items: center;
     justify-items: center;
   }
+  footer
+  {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr auto;
+    grid-gap: 1rem;
+    button { padding: .25rem 1rem; }
+  }
   .mat-form-field
   {
     width: 100%;
   }
-  .mat-fab:not(.mat-primary):not(.mat-accent)
+  .mat-fab
   {
-    background-color: transparent;
-  }
-  .add-button
-  {
-    width: 100%;
-    padding: .25rem;
-    grid-area: 3 / 1 / 4 / 3;
+    transition: all 1s;
+    &:not(.mat-primary):not(.mat-accent) { background-color: transparent; }
+    &.uploaded
+    {
+      border-radius: 28px;
+      padding: 0 1rem;
+      margin-left: -1000%;
+      width: auto;
+      max-width: 14rem;
+      margin-right: -1000%;
+      ::ng-deep .mat-button-wrapper
+      {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
 }
 .mat-list-item
 {
-  max-width: 26rem;
+  max-width: 28rem;
   overflow: hidden;
   button { margin-left: .5rem; }
   &.done { a { text-decoration: line-through; } }

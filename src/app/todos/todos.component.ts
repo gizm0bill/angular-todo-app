@@ -3,7 +3,6 @@ import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { TodoService } from '../todo.service';
 import { Todo } from '../todo';
-import { take } from 'rxjs/operators';
 
 @Component
 ({
@@ -11,7 +10,6 @@ import { take } from 'rxjs/operators';
   templateUrl: './todos.component.html',
   styleUrls: ['./todos.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [TodoService],
 })
 export class TodosComponent
 {
@@ -29,6 +27,10 @@ export class TodosComponent
   }
   
   @ViewChild('todoForm') todoForm: NgForm;
+  upload()
+  {
+
+  }
   addTodo()
   {
     if ( !this.todoModel.name ) return;
@@ -38,11 +40,4 @@ export class TodosComponent
   }
   updateTodo( props: Partial<Todo> ) { return this.todoService.updateTodo( props ); }
   removeTodo( todo: Partial<Todo> ) { return this.todoService.removeTodo( todo ); }
-  get( id: number ) { 
-    debugger;
-    return this.todoService.getTodoById( id ).subscribe();
-  }
-  upload() {
-
-  }
 }

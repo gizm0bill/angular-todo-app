@@ -1,17 +1,17 @@
 <article *ngIf="todos$|async as todos">
-  <header>
-    <h3>Add Todo:</h3>
-    <button mat-icon-button>
-      <mat-icon aria-label="Minimize">expand_less</mat-icon>
-    </button>
-  </header>
   <form #todoForm="ngForm" (ngSubmit)="addTodo()">
+    <header>
+      <h3>Add Todo:</h3>
+      <button type="button" mat-icon-button>
+        <mat-icon aria-label="Minimize">expand_less</mat-icon>
+      </button>
+    </header>
     <main>
       <mat-form-field appearance="outline">
         <mat-label>Todo</mat-label>
         <input matInput required placeholder="The name of your Todo" [(ngModel)]="todoModel.name" name="name" #name="ngModel">
       </mat-form-field>
-      <button mat-fab matSuffix type="button" color="accent" matTooltip="Attach Image" matTooltipPosition="after" (click)="fileInput.click()">
+      <button class="uploaded" mat-fab matSuffix type="button" color="accent" matTooltip="Attach Image" matTooltipPosition="after" (click)="fileInput.click()">
         <mat-icon aria-label="Attach Image">attach_file</mat-icon>
       </button>
       <mat-form-field  appearance="outline">
@@ -27,13 +27,18 @@
         matTooltip="Mark as Complete" matTooltipPosition="after">
         <mat-icon aria-label="Attach Image">check</mat-icon>
       </button>
+    </main>
+    <footer>
       <button class="add-button" mat-stroked-button type="submit" color="primary">
         <mat-icon>add_circle</mat-icon>
         Add
       </button>
-    </main>
+      <button class="reset-button" mat-stroked-button type="reset">
+        <mat-icon>clear</mat-icon>
+        Reset
+      </button>
+    </footer>
     <input type="file" #fileInput multiple (change)="upload( $event, fileInput )" />
-
   </form>
 </article>
 <article *ngIf="todos$|async as todos; else loading">
@@ -44,8 +49,7 @@
     <mat-nav-list>
       <ng-container *ngFor="let todo of todos; last as isLast">
         <mat-list-item [class.done]="todo.complete">
-          <a matLine (click)="get(todo.id)">{{ todo.name }}</a>
-            <!-- [routerLink]="{ outlets: { popup: [todo.id] } }" -->
+          <a matLine [routerLink]="{ outlets: { popup: [ todo.id ] } }">{{ todo.name }}</a>
           <button mat-icon-button (click)="removeTodo( todo )" matTooltip="Delete" matTooltipPosition="above">
               <mat-icon>close</mat-icon>
             </button>

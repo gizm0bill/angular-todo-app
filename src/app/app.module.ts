@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { TodosComponent } from './todos/todos.component';
 import { AppMaterialModule } from './app-material.module';
 import { TodoComponent } from './todo/todo.component';
+import { TodoService } from './todo.service';
 
 @NgModule
 ({
@@ -24,7 +25,7 @@ import { TodoComponent } from './todo/todo.component';
     AppMaterialModule,
     AppRoutingModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [ TodoService ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }
