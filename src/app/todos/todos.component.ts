@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { TodoService } from '../todo.service';
 import { Todo } from '../todo';
+import { take } from 'rxjs/operators';
 
 @Component
 ({
@@ -22,21 +23,25 @@ export class TodosComponent
     // this.todoService.addTodo( new Todo({ name: 'ipsum' }) );
     // this.todoService.addTodo( new Todo({ name: 'dolor' }) );
     // this.todoService.addTodo( new Todo({ name: 'sit' }) );
-    // this.todoService.addTodo( new Todo({ name: 'amet' }) );
+    this.todoService.createTodo( new Todo({ name: 'amet' }) );
     
-    this.todos$ = this.todoService.todos;
+    this.todos$ = this.todoService.todos$;
   }
   
   @ViewChild('todoForm') todoForm: NgForm;
   addTodo()
   {
     if ( !this.todoModel.name ) return;
-    this.todoService.addTodo( this.todoModel );
+    this.todoService.createTodo( this.todoModel );
     this.todoModel = new Todo;
     this.todoForm.resetForm();
   }
-  updateTodo( id: number, props: Todo ) { return this.todoService.updateTodoById( id, props ); }
-  removeTodo( id: number ) { return this.todoService.removeTodoById(id); }
+  updateTodo( props: Partial<Todo> ) { return this.todoService.updateTodo( props ); }
+  removeTodo( todo: Partial<Todo> ) { return this.todoService.removeTodo( todo ); }
+  get( id: number ) { 
+    debugger;
+    return this.todoService.getTodoById( id ).subscribe();
+  }
   upload() {
 
   }

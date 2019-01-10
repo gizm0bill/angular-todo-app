@@ -19,8 +19,8 @@ describe('TodoDataService', () =>
       const
         todo1 = new Todo({ name: 'Buy milk', complete: false }),
         todo2 = new Todo({ name: 'Make dog bark', complete: true });
-      service.addTodo( todo1 );
-      service.addTodo( todo2 );
+      service.createTodo( todo1 );
+      service.createTodo( todo2 );
       service.todos.subscribe( _ => console.log(_) );
 
       service.todos.subscribe( _ => console.log(_) );

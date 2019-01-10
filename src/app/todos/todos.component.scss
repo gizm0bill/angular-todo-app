@@ -54,7 +54,7 @@ form
 {
   max-width: 26rem;
   overflow: hidden;
-  button + button { margin-left: .5rem; }
+  button { margin-left: .5rem; }
   &.done { a { text-decoration: line-through; } }
 }
 [type=file] { display: none; }

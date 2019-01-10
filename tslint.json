@@ -104,6 +104,7 @@
     ],
     "unified-signatures": true,
     "variable-name": false,
+    "no-irregular-whitespace": true,
     "whitespace": [
       true,
       "check-branch",

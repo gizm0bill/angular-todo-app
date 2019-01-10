@@ -44,11 +44,12 @@
     <mat-nav-list>
       <ng-container *ngFor="let todo of todos; last as isLast">
         <mat-list-item [class.done]="todo.complete">
-          <a matLine [routerLink]="{ outlets: { popup: [todo.id] } }">{{ todo.name }}</a>
-          <button mat-icon-button (click)="removeTodo( todo.id )" matTooltip="Delete" matTooltipPosition="above">
+          <a matLine (click)="get(todo.id)">{{ todo.name }}</a>
+            <!-- [routerLink]="{ outlets: { popup: [todo.id] } }" -->
+          <button mat-icon-button (click)="removeTodo( todo )" matTooltip="Delete" matTooltipPosition="above">
               <mat-icon>close</mat-icon>
             </button>
-          <button mat-icon-button color="primary" (click)="updateTodo( todo.id, { complete: !todo.complete } )" matTooltip="Complete Todo" matTooltipPosition="after">
+          <button mat-icon-button color="primary" (click)="updateTodo( { id: todo.id, complete: !todo.complete } )" matTooltip="Complete Todo" matTooltipPosition="after">
             <mat-icon>{{ todo.complete ? 'check_circle_outline' : 'check' }}</mat-icon>
           </button>
         </mat-list-item>

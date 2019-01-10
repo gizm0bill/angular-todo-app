@@ -1,58 +1,74 @@
 import { Injectable } from '@angular/core';
-import { ReplaySubject, Observable, BehaviorSubject } from 'rxjs';
-import { filter, map, scan, shareReplay, switchMapTo, startWith } from 'rxjs/operators';
+import { ReplaySubject, Observable, BehaviorSubject, Subject } from 'rxjs';
+import { filter, map, scan, shareReplay, switchMapTo, startWith, tap, take } from 'rxjs/operators';
 import { Todo } from './todo';
+
+type TodosProcess = (todos: Todo[]) => Todo[];
 
 let lastId = 0;
 @Injectable({ providedIn: 'root' })
 export class TodoService
 {
-  private deletedTodos = new Set;
-  private todoUpdates = new Map;
-  private resetter = new BehaviorSubject<boolean>(true);
-  private _todos: ReplaySubject<Todo> = new ReplaySubject;
-  constructor() { }
-  get todos(): Observable<Todo[]>
+  todos$: Observable<Todo[]>;
+  private resetter$ = new BehaviorSubject<TodosProcess>( ( todos: Todo[] ) => todos );
+  private create$ = new Subject<Todo>();
+  private update$ = new Subject<Partial<Todo>>();
+  private remove$ = new Subject<Partial<Todo>>();
+  private get$ = new Subject<Partial<Todo>>();
+
+  todo$: Observable<Todo>;
+  private x: any;
+  constructor()
   {
-    return this.resetter.asObservable().pipe
+    this.x = this.resetter$.pipe
     (
-      switchMapTo( this._todos.asObservable().pipe
-      (
-        startWith( new Todo({ id: undefined, name: '' }) ),
-        filter( todo => !this.deletedTodos.has( todo.id ) ),
-        map( todo => this.todoUpdates.has( todo.id ) ? Object.assign( todo, this.todoUpdates.get( todo.id ) ) : todo ),
-        scan( ( todos: Todo[], todo: Todo ) => todo.id !== undefined ? [ ...todos, todo ] : [], [] ),
-      ) ),
-      shareReplay()
-      
+      tap( _ => { debugger; } ),
+      scan( ( todos: Todo[], process: TodosProcess ) => process( todos ), [] ),
+      tap( _ => { debugger; } ),
     );
+    this.todos$ = this.x.pipe( shareReplay() );
+
+    // define add process
+    this.create$.pipe
+    (
+      map( (todo: Todo): TodosProcess => ( todos: Todo[] ) => [ ...todos, todo ] )
+    ).subscribe( this.resetter$ );
+    // define update process
+    this.update$.pipe
+    (
+      map( ( todo: Todo ): TodosProcess => ( todos: Todo[] ) => ( Object.assign( todos.find( t => t.id === todo.id ), todo ), todos ) )
+    ).subscribe( this.resetter$ );
+    // define remove process
+    this.remove$.pipe
+    (
+      map( ( todo: Todo ): TodosProcess => ( todos: Todo[] ) => todos.filter( t => todo.id !== t.id ) )
+    ).subscribe( this.resetter$ );
+    this.get$.pipe
+    (
+      map( ( todo: Todo ): TodosProcess => ( todos: Todo[] ) => todos.find( t => t.id === todo.id ) as unknown as Todo[] )
+    ).subscribe( this.resetter$ );
   }
-  addTodo( todo: Todo ): TodoService
+  // expose create method
+  createTodo( todo: Todo )
   {
-    if ( !todo.id )  todo.id = ++lastId;
-    this._todos.next( todo );
-    return this;
+    if ( !todo.id ) todo.id = ++lastId;
+    return this.create$.next( todo );
   }
-  removeTodo( todo: Todo ): TodoService
+  // expose update method
+  updateTodo( todo: Partial<Todo> )
   {
-    if ( !todo.id ) return this;
-    return this.removeTodoById( todo.id );
+    if ( !todo.id ) return;
+    return this.update$.next( todo );
   }
-  removeTodoById( id: number ): TodoService
+  // expose remove method
+  removeTodo( todo: Partial<Todo> )
   {
-    this.deletedTodos.add( id );
-    this.resetter.next(true);
-    return this;
+    if ( !todo.id ) return;
+    return this.remove$.next( todo );
   }
-  updateTodo( todo: Todo, props: Todo ): TodoService
+  getTodoById( id: number )
   {
-    if ( !todo.id ) return this;
-    return this.updateTodoById( todo.id, props );
-  }
-  updateTodoById( id: number, props: Todo )
-  {
-    this.todoUpdates.set( id, props );
-    this.resetter.next(true);
-    return this;
+    this.get$.next( { id } );
+    return this.resetter$.pipe( take(1), tap( _ => { debugger; } ) );
   }
 }

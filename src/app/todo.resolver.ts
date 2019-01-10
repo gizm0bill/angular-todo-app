@@ -6,11 +6,12 @@ import { TodoService } from './todo.service';
 import { find, take, tap, map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
-export class TodoResolver implements Resolve<Observable<Todo[]>>
+export class TodoResolver implements Resolve<Observable<Todo>>
 {
   constructor( private todoService: TodoService ) {}
   
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot )
   {
+    return this.todoService.getTodoById( route.params.id );
   }
 }
