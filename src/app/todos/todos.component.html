@@ -11,8 +11,12 @@
         <mat-label>Todo</mat-label>
         <input matInput required placeholder="The name of your Todo" [(ngModel)]="todoModel.name" name="name" #name="ngModel">
       </mat-form-field>
-      <button class="uploaded" mat-fab matSuffix type="button" color="accent" matTooltip="Attach Image" matTooltipPosition="after" (click)="fileInput.click()">
+      <button mat-fab matSuffix color="accent"
+        [class.uploaded]="!!(uploaded$|async)"
+        type="button" (click)="fileInput.click()"
+        matTooltip="Attach Image" matTooltipPosition="after">
         <mat-icon aria-label="Attach Image">attach_file</mat-icon>
+        <mat-icon class="ok">done_outline</mat-icon>
       </button>
       <mat-form-field  appearance="outline">
         <mat-label>Description</mat-label>
@@ -61,6 +65,9 @@
       </ng-container>
     </mat-nav-list>
   </main>
+  <footer>
+    …
+  </footer>
 </article>
 <div class="popup">
   <router-outlet name="popup"></router-outlet>

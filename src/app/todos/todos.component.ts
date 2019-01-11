@@ -1,8 +1,18 @@
 import { Component, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, fromEvent } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { TodoService } from '../todo.service';
 import { Todo } from '../todo';
+
+enum IMAGE_MIME_TYPES
+{
+  SVG = 'image/svg+xml',
+  BMP = 'image/bmp',
+  JPG = 'image/jpeg',
+  PNG = 'image/png',
+  GIF = 'image/gif',
+};
 
 @Component
 ({
@@ -27,9 +37,22 @@ export class TodosComponent
   }
   
   @ViewChild('todoForm') todoForm: NgForm;
-  upload()
+  uploaded$: Observable<string>;
+  upload( event: Event )
   {
-
+    const file = (event.target as HTMLInputElement).files.item(0);
+    /**
+     * @summary example of file manipulation
+     */
+    const reader = new FileReader;
+    this.uploaded$ = fromEvent( reader, 'loadend' ).pipe( map( _ =>
+    {
+      const [ , type ] = reader.result.toString().split(';').reduce( ( acc, val, idx ) => [ ...acc, ...( !idx ? val.split(':') : [val] ) ], [] );
+      if ( !Object.values(IMAGE_MIME_TYPES).includes(type) ) return;
+      // …file manipulation…
+      return file.name;
+    } ) );
+    reader.readAsDataURL( file );
   }
   addTodo()
   {
