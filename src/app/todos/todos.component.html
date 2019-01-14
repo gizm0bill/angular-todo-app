@@ -69,8 +69,8 @@
     …
   </footer>
 </article>
-<div class="popup">
-  <router-outlet name="popup"></router-outlet>
+<div class="popup" [class.active]="popupActive">
+  <router-outlet name="popup" (activate)="popupActive = true" (deactivate)="popupActive = false"></router-outlet>
 </div>
 <ng-template #loading>
   <article>

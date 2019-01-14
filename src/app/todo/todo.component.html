@@ -1,6 +1,9 @@
 <ng-container *ngIf=" todo$|async as todo ">
   <header>
     <h3>{{todo.name}}</h3>
+    <button type="button" mat-icon-button routerLink="/todos">
+      <mat-icon aria-label="Close">close</mat-icon>
+    </button>
   </header>
   <main>
     <p>{{todo.description}}</p>

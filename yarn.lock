@@ -164,6 +164,13 @@
   dependencies:
     tslib "^1.9.0"
 
+"@angular/core@>=4.3.1":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-7.2.0.tgz#79573fe66be28a047ca4348e870566e32e4ff8e2"
+  integrity sha512-tlCDDM9IknXvVLk1sg0lzCO4OREM54i1bFtTpl5kPtugK6l4kYCOH78UzDPHnOzzI3LGLj8Hb2NiObVa9c4fdg==
+  dependencies:
+    tslib "^1.9.0"
+
 "@angular/core@~7.1.0":
   version "7.1.4"
   resolved "https://registry.yarnpkg.com/@angular/core/-/core-7.1.4.tgz#ad899985290957bbb9ac5c47c62ae5a72ccf5d00"
@@ -629,6 +636,13 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=
+
+angular2-indexeddb@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/angular2-indexeddb/-/angular2-indexeddb-1.2.3.tgz#14a57c8e65a1333af18f7925fe3e798638bb862d"
+  integrity sha512-ND9DZpqMnG7nBOgUsSnRn/t1PgcvrjPBv7C8ur9IuMcxPiQHRC7rIib7YhsWIXRyvQixiwga40JiKMuHJXAQPg==
+  dependencies:
+    "@angular/core" ">=4.3.1"
 
 ansi-colors@^3.0.0:
   version "3.2.3"

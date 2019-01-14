@@ -1,0 +1,17 @@
+@import '~@angular/material/theming';
+
+:host
+{
+  @include mat-elevation(5);
+  padding: 1rem;
+  background-color: white;
+}
+
+header
+{
+  display: flex;
+  align-items: center;
+  min-height: 2.5rem;
+  button { margin-right: 0.75rem; }
+  h3 { flex: 1; }
+}
