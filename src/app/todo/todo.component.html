@@ -6,6 +6,7 @@
     </button>
   </header>
   <main>
+    <div class="todo-image" [style.backgroundImage]="todo.image" *ngIf="todo.image"></div>
     <p>{{todo.description}}</p>
   </main>
   <footer></footer>

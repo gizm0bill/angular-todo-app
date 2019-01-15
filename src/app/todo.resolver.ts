@@ -3,6 +3,7 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TodoService } from './todo.service';
 import { Todo } from './todo';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class TodoResolver implements Resolve<Observable<Todo>>
@@ -14,6 +15,6 @@ export class TodoResolver implements Resolve<Observable<Todo>>
    */
   resolve( route: ActivatedRouteSnapshot )
   {
-    return this.todoService.getTodoById( +route.params.id );
+    return this.todoService.getTodoById( +route.params.id ).pipe( map( todo => Object.assign( {}, todo ) ) );
   }
 }

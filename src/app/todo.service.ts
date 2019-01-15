@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { map, scan, shareReplay, take, startWith } from 'rxjs/operators';
+import { map, scan, take, startWith, publishReplay, refCount } from 'rxjs/operators';
 import { Todo } from './todo';
 import { StorageService } from './storage.service';
 
@@ -19,11 +19,16 @@ export class TodoService
   {
     this.todos$ = this.resetter$.pipe
     (
-      startWith( () => storage.getItems() || [] ),
-      // tap( _ => { debugger; } ),
+      startWith( () =>
+      {
+        const items: Array<{ id: number }> = storage.getItems() || [];
+        // update lastId
+        lastId = items.reduce( ( max, item ) => item.id > max ? item.id : max, 0 );
+        return items;
+      } ),
       scan( ( todos: Todo[], process: TodosProcess ) => process( todos ), [] ),
-      // tap( _ => { debugger; } ),
-      shareReplay(),
+      publishReplay(1),
+      refCount(),
     );
     // define add process
     this.create$.pipe
@@ -68,10 +73,7 @@ export class TodoService
     return this.todos$.pipe
     (
       take(1),
-      map( todos =>
-      {
-        return todos.find( todo => todo.id === id );
-      } )
+      map( todos => todos.find( todo => todo.id === id ) )
     );
   }
 }

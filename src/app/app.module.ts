@@ -8,7 +8,7 @@ import { TodosComponent } from './todos/todos.component';
 import { AppMaterialModule } from './app-material.module';
 import { TodoComponent } from './todo/todo.component';
 import { TodoService } from './todo.service';
-import { StorageService } from './storage.service';
+import { StorageService, BROWSER_STORAGE } from './storage.service';
 
 @NgModule
 ({
@@ -30,6 +30,10 @@ import { StorageService } from './storage.service';
   [
     TodoService,
     StorageService,
+    /**
+     * @summary injection token - example of InjectionToken override
+     */
+    // { provide: BROWSER_STORAGE, useFactory: () => sessionStorage }
   ],
   bootstrap: [ AppComponent ]
 })

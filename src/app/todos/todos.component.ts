@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Observable, fromEvent } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, fromEvent, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { TodoService } from '../todo.service';
 import { Todo } from '../todo';
 
@@ -25,9 +25,14 @@ export class TodosComponent
 {
   todoModel = new Todo;
   todos$: Observable<Todo[]>;
+  stats: { total: number, complete: number };
   constructor( private todoService: TodoService )
   {
-    this.todos$ = this.todoService.todos$;
+    this.todos$ = this.todoService.todos$.pipe
+    (
+      tap( todos =>
+        this.stats = todos.reduce( ( stats, todo ) => ( stats.complete += +todo.complete, stats.total += 1, stats ) , { total: 0, complete: 0 } )
+    ) );
   }
   
   @ViewChild('todoForm') todoForm: NgForm;
@@ -41,9 +46,11 @@ export class TodosComponent
     const reader = new FileReader;
     this.uploaded$ = fromEvent( reader, 'loadend' ).pipe( map( _ =>
     {
-      const [ , type ] = reader.result.toString().split(';').reduce( ( acc, val, idx ) => [ ...acc, ...( !idx ? val.split(':') : [val] ) ], [] );
+      const fileData = reader.result.toString();
+      const [ , type ] = fileData.split(';').reduce( ( acc, val, idx ) => [ ...acc, ...( !idx ? val.split(':') : [val] ) ], [] );
       if ( !Object.values(IMAGE_MIME_TYPES).includes(type) ) return;
       // …file manipulation…
+      this.todoModel.image = fileData;
       return file.name;
     } ) );
     reader.readAsDataURL( file );
@@ -51,8 +58,12 @@ export class TodosComponent
   addTodo()
   {
     if ( !this.todoModel.name ) return;
+    /**
+     * @todo save after upload
+     */
     this.todoService.createTodo( this.todoModel );
     this.todoModel = new Todo;
+    this.uploaded$ = of('');
     this.todoForm.resetForm();
   }
   updateTodo( props: Partial<Todo> ) { return this.todoService.updateTodo( props ); }

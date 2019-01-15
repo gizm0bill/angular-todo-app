@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TodoService } from '../todo.service';
 import { Todo } from '../todo';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'article.todo',
@@ -13,8 +13,11 @@ import { Observable } from 'rxjs';
 export class TodoComponent
 {
   todo$: Observable<Todo>;
-  constructor( route: ActivatedRoute )
+  constructor( route: ActivatedRoute, sanitizer: DomSanitizer )
   {
-    this.todo$ = route.data.pipe( map( ({ todo }) => todo ) );
+    this.todo$ = route.data.pipe
+    (
+      map( ({ todo }): Todo => ( todo.image = todo.image ? sanitizer.bypassSecurityTrustStyle(`url(${todo.image})`) : null, todo ) ),
+    );
   }
 }
