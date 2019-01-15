@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { map, scan, shareReplay, take } from 'rxjs/operators';
+import { map, scan, shareReplay, take, startWith } from 'rxjs/operators';
 import { Todo } from './todo';
+import { StorageService } from './storage.service';
 
 let lastId = 0;
 type TodosProcess = (todos: Todo[]) => Todo[];
@@ -14,10 +15,11 @@ export class TodoService
   private update$ = new Subject<Partial<Todo>>();
   private remove$ = new Subject<Partial<Todo>>();
   private get$ = new Subject<Partial<Todo>>();
-  constructor()
+  constructor( readonly storage: StorageService )
   {
     this.todos$ = this.resetter$.pipe
     (
+      startWith( () => storage.getItems() || [] ),
       // tap( _ => { debugger; } ),
       scan( ( todos: Todo[], process: TodosProcess ) => process( todos ), [] ),
       // tap( _ => { debugger; } ),
@@ -26,17 +28,17 @@ export class TodoService
     // define add process
     this.create$.pipe
     (
-      map( (todo: Todo): TodosProcess => ( todos: Todo[] ) => [ ...todos, todo ] )
+      map( (todo: Todo): TodosProcess => ( todos: Todo[] ) => storage.setItems([ ...todos, todo ]) ),
     ).subscribe( this.resetter$ );
     // define update process
     this.update$.pipe
     (
-      map( ( todo: Todo ): TodosProcess => ( todos: Todo[] ) => ( Object.assign( todos.find( t => t.id === todo.id ), todo ), todos ) )
+      map( ( todo: Todo ): TodosProcess => ( todos: Todo[] ) => ( Object.assign( todos.find( t => t.id === todo.id ), todo ), storage.setItems(todos) ) )
     ).subscribe( this.resetter$ );
     // define remove process
     this.remove$.pipe
     (
-      map( ( todo: Todo ): TodosProcess => ( todos: Todo[] ) => todos.filter( t => todo.id !== t.id ) )
+      map( ( todo: Todo ): TodosProcess => ( todos: Todo[] ) => storage.setItems( todos.filter( t => todo.id !== t.id ) ) )
     ).subscribe( this.resetter$ );
     this.get$.pipe
     (

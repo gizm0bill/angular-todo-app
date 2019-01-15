@@ -27,12 +27,6 @@ export class TodosComponent
   todos$: Observable<Todo[]>;
   constructor( private todoService: TodoService )
   {
-    // this.todoService.addTodo( new Todo({ name: 'lorem', complete: true }) );
-    // this.todoService.addTodo( new Todo({ name: 'ipsum' }) );
-    // this.todoService.addTodo( new Todo({ name: 'dolor' }) );
-    // this.todoService.addTodo( new Todo({ name: 'sit' }) );
-    this.todoService.createTodo( new Todo({ name: 'amet' }) );
-    
     this.todos$ = this.todoService.todos$;
   }
   
@@ -63,4 +57,6 @@ export class TodosComponent
   }
   updateTodo( props: Partial<Todo> ) { return this.todoService.updateTodo( props ); }
   removeTodo( todo: Partial<Todo> ) { return this.todoService.removeTodo( todo ); }
+  
+  popupActive: boolean;
 }
