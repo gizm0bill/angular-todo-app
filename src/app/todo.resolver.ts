@@ -9,6 +9,9 @@ export class TodoResolver implements Resolve<Observable<Todo>>
 {
   constructor( private todoService: TodoService ) {}
 
+  /**
+   * @summary route data resolver - definition
+   */
   resolve( route: ActivatedRouteSnapshot )
   {
     return this.todoService.getTodoById( +route.params.id );

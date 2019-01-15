@@ -42,7 +42,7 @@ export class TodosComponent
   {
     const file = (event.target as HTMLInputElement).files.item(0);
     /**
-     * @summary example of file manipulation
+     * @summary example of uploaded file manipulation
      */
     const reader = new FileReader;
     this.uploaded$ = fromEvent( reader, 'loadend' ).pipe( map( _ =>

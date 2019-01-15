@@ -18,7 +18,10 @@ const routes: Routes =
     [
       {
         path: ':id',
-        component: TodoComponent, 
+        component: TodoComponent,
+        /**
+         * @summary route data resolver - usage
+         */
         resolve: { todo: TodoResolver },
         outlet: 'popup',
       }
