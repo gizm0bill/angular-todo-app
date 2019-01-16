@@ -8,10 +8,13 @@
     </header>
     <div [hidden]="!showAdd">
       <main>
+        <!-- @summary material - form field usage -->
         <mat-form-field appearance="outline">
           <mat-label>Todo</mat-label>
+          <!-- @summary template - two way binding -->
           <input matInput required placeholder="The name of your Todo" [(ngModel)]="todoModel.name" name="name" #name="ngModel">
         </mat-form-field>
+        <!-- @summary material - form field usage -->
         <button mat-fab matSuffix color="accent"
           [class.uploaded]="!!(uploaded$|async)"
           type="button" (click)="fileInput.click()"
@@ -26,6 +29,7 @@
             [(ngModel)]="todoModel.description">
           </textarea>
         </mat-form-field>
+
         <button mat-fab matSuffix type="button"
           [color]=" todoModel.complete ? 'primary' : '' "
           (click)=" todoModel.complete = !todoModel.complete "

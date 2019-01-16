@@ -20,6 +20,9 @@ enum IMAGE_MIME_TYPES
 ({
   selector: 'section.todos',
   templateUrl: './todos.component.html',
+  /**
+   * @summary styles - component styles
+   */
   styleUrls: ['./todos.component.scss'],
   /**
    * @summary injection - example of InjectionToken override in component
@@ -45,10 +48,10 @@ export class TodosComponent
   upload( event: Event )
   {
     const file = (event.target as HTMLInputElement).files.item(0);
-    /**
-     * @summary file uploads - example of uploaded file manipulation
-     */
     const reader = new FileReader;
+    /**
+     * @summary RxJS - create from JS stuff, i.e. object events
+     */
     this.uploaded$ = fromEvent( reader, 'loadend' ).pipe( map( _ =>
     {
       const fileData = reader.result.toString();

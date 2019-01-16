@@ -4,6 +4,9 @@ import { TodosComponent } from './todos/todos.component';
 import { TodoComponent } from './todo/todo.component';
 import { TodoResolver } from './todo.resolver';
 
+/**
+ * @summary routing
+ */
 const routes: Routes =
 [
   {

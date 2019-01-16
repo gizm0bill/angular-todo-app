@@ -23,15 +23,21 @@ import { StorageService, BROWSER_STORAGE } from './storage.service';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    /**
+     * @summary injection - modules
+     */
     AppMaterialModule,
     AppRoutingModule
   ],
   providers:
   [
+    /**
+     * @summary injection - providers
+     */
     TodoService,
     StorageService,
     /**
-     * @summary injection token - example of InjectionToken override in module
+     * @summary injection - example of InjectionToken override in module
      */
     // { provide: BROWSER_STORAGE, useFactory: () => sessionStorage }
   ],
