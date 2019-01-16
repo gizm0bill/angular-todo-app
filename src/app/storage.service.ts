@@ -6,12 +6,11 @@ export const BROWSER_STORAGE = new InjectionToken<Storage>('Browser Storage',
   factory: () => localStorage
 });
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class StorageService
 {
   /**
-   * 
-   * @summary injection token - example of InjectionToken usage
+   * @summary injection - example of InjectionToken usage
    */
   constructor( @Inject( BROWSER_STORAGE ) private readonly storage: Storage ) {}
 

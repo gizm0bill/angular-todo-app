@@ -31,7 +31,7 @@ import { StorageService, BROWSER_STORAGE } from './storage.service';
     TodoService,
     StorageService,
     /**
-     * @summary injection token - example of InjectionToken override
+     * @summary injection token - example of InjectionToken override in module
      */
     // { provide: BROWSER_STORAGE, useFactory: () => sessionStorage }
   ],

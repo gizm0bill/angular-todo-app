@@ -1,9 +1,11 @@
-import { Component, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Observable, fromEvent, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { TodoService } from '../todo.service';
 import { Todo } from '../todo';
+import { Router } from '@angular/router';
+// import { BROWSER_STORAGE, StorageService } from '../storage.service';
 
 enum IMAGE_MIME_TYPES
 {
@@ -19,14 +21,17 @@ enum IMAGE_MIME_TYPES
   selector: 'section.todos',
   templateUrl: './todos.component.html',
   styleUrls: ['./todos.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  /**
+   * @summary injection - example of InjectionToken override in component
+   */
+  // providers: [ TodoService, StorageService, { provide: BROWSER_STORAGE, useFactory: () => sessionStorage } ]
 })
 export class TodosComponent
 {
   todoModel = new Todo;
   todos$: Observable<Todo[]>;
   stats: { total: number, complete: number };
-  constructor( private todoService: TodoService )
+  constructor( private todoService: TodoService, public router: Router )
   {
     this.todos$ = this.todoService.todos$.pipe
     (
@@ -41,7 +46,7 @@ export class TodosComponent
   {
     const file = (event.target as HTMLInputElement).files.item(0);
     /**
-     * @summary example of uploaded file manipulation
+     * @summary file uploads - example of uploaded file manipulation
      */
     const reader = new FileReader;
     this.uploaded$ = fromEvent( reader, 'loadend' ).pipe( map( _ =>
@@ -69,5 +74,7 @@ export class TodosComponent
   updateTodo( props: Partial<Todo> ) { return this.todoService.updateTodo( props ); }
   removeTodo( todo: Partial<Todo> ) { return this.todoService.removeTodo( todo ); }
   
+  showAdd = true;
   popupActive: boolean;
+  closePopup() { this.router.navigateByUrl('/todos'); }
 }

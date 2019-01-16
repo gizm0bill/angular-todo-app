@@ -17,6 +17,9 @@ export class TodoService
   private get$ = new Subject<Partial<Todo>>();
   constructor( readonly storage: StorageService )
   {
+    /**
+     * @summary RxJS - Subject, pipes operators usage
+     */
     this.todos$ = this.resetter$.pipe
     (
       startWith( () =>
@@ -27,6 +30,9 @@ export class TodoService
         return items;
       } ),
       scan( ( todos: Todo[], process: TodosProcess ) => process( todos ), [] ),
+      /**
+       * @summary RxJS - Multicasting - why not shareReplay()?
+       */
       publishReplay(1),
       refCount(),
     );
